@@ -1,103 +1,165 @@
+'use client';
 import Image from "next/image";
+import heroImage from "@/assets/Hogwarts.jpg";
+import { useCharacters } from '@/app/context/context';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 
-export default function Home() {
+const COLORS = {
+  Gryffindor: 'var(--gryffindor)',
+  Slytherin: 'var(--slytherin)',
+  Ravenclaw: 'var(--ravenclaw)',
+  Hufflepuff: 'var(--hufflepuff)',
+  default: 'var(--default-house)',
+}
+
+function processChartData(characters) {
+  const genderMap = {};
+  const ageMap = {};
+  const houseMap = {};
+
+  characters.forEach((char) => {
+    const gender = char.gender || 'Unknown';
+    genderMap[gender] = (genderMap[gender] || 0) + 1;
+
+    if (char.house) {
+      houseMap[char.house] = (houseMap[char.house] || 0) + 1;
+    } else {
+      houseMap['No House'] = (houseMap['default'] || 0) + 1;
+    }
+
+    if (char.yearOfBirth) {
+      const age = 1991 - Number(char.yearOfBirth);
+      ageMap[age] = (ageMap[age] || 0) + 1;
+    }
+  });
+
+  const genderData = Object.entries(genderMap).map(([name, value]) => ({ name, value }));
+  const houseData = Object.entries(houseMap).map(([name, value]) => ({ name, value }));
+  const ageData = Object.entries(ageMap).map(([age, count]) => ({ age: Number(age), count })).sort((a, b) => a.age - b.age);
+
+  return { genderData, houseData, ageData };
+}
+
+export default function HomePage() {
+  const { characters, loading, error } = useCharacters();
+  const { genderData, houseData, ageData } = processChartData(characters || []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+    <div>
+      <div className="w-full h-[500px] px-0 py-0 relative font-serif">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+          src={heroImage}
+          alt="Harry Potter Hero"
+          className="w-full object-cover"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover" }}
         />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="w-[60%] absolute inset-0 flex items-center p-20">
+          <div className="bg-white/40 backdrop-blur-sm rounded-lg p-8 shadow-lg">
+            <h2 className="text-4xl font-bold mb-4">Explore the World of Harry Potter</h2>
+            <p className="text-lg mb-4">
+              Discover detailed profiles of your favorite characters from the magical world created by J.K. Rowling.
+            </p>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-16">
+        {/* Gender Pie Chart */}
+        <div>
+          <h3 className="text-lg font-serif mb-2 text-center">Gender Distribution</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <PieChart>
+              <Pie
+                data={genderData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+                isAnimationActive={true}
+                animationBegin={0}
+                animationDuration={1200}
+              >
+                {genderData.map((entry, index) => {
+                  let color;
+                  if (entry.name.toLowerCase() === 'male') {
+                    color = COLORS.Ravenclaw;
+                  } else if (entry.name.toLowerCase() === 'female') {
+                    color = COLORS.Gryffindor;
+                  } else {
+                    color = COLORS.default;
+                  }
+                  return <Cell key={`cell-gender-${index}`} fill={color} />;
+                })}
+                </Pie>
+                <Tooltip />
+                </PieChart>
+                </ResponsiveContainer>
+              </div>
+              
+              {/* Age Bar Chart */}
+              <div>
+                <h3 className="text-lg font-serif mb-2 text-center">Age Distribution</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={ageData} barCategoryGap={4} barGap={2}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis 
+                  dataKey="age" 
+                  label={{ value: 'Age', position: 'insideBottom', fontSize: 12 }} 
+                  tick={{ fontSize: 10 }}
+                />
+                <YAxis 
+                  allowDecimals={false} 
+                  label={{ value: 'Number', angle: -90, position: 'insideLeft', offset: 30, fontSize: 12 }} 
+                  tick={{ fontSize: 10 }}
+                />
+                <Tooltip />
+                <Bar
+                  dataKey="count"
+                  fill="#8884d8"
+                  isAnimationActive={true}
+                  animationDuration={1200}
+                  animationBegin={0}
+                />
+                </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* House Pie Chart */}
+              <div>
+                <h3 className="text-lg font-serif mb-2 text-center">House Distribution</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <PieChart>
+                    <Pie
+                      data={houseData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      label
+                      isAnimationActive={true}
+                      animationBegin={0}
+                      animationDuration={1200}
+                    >
+                {houseData.map((entry, index) => {
+                  const color = COLORS[entry.name] || COLORS.default;
+                  return (
+                    <Cell key={`cell-house-${index}`} fill={color} />
+                  );
+                })}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </div>
   );
 }
