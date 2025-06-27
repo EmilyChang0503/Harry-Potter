@@ -3,6 +3,8 @@ import Image from "next/image";
 import heroImage from "@/assets/Hogwarts.jpg";
 import { useCharacters } from '@/app/context/context';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import LiquidGlass from "liquid-glass-react";
 
 const COLORS = {
   Gryffindor: 'var(--gryffindor)',
@@ -49,7 +51,7 @@ export default function HomePage() {
 
   return (
     <div>
-      <div className="w-full h-[500px] px-0 py-0 relative font-serif">
+      <div className="h-[500px] px-0 py-0 relative font-serif flex items-center justify-center">
         <Image
           src={heroImage}
           alt="Harry Potter Hero"
@@ -58,34 +60,37 @@ export default function HomePage() {
           sizes="100vw"
           style={{ objectFit: "cover" }}
         />
-        <div className="w-[60%] absolute inset-0 flex items-center p-20">
-          <div className="bg-white/40 backdrop-blur-sm rounded-lg p-8 shadow-lg">
+        <LiquidGlass>
+        {/* <div className="w-[60%] flex items-center p-20"> */}
+          <div className="w-[600px] z-10 bg-white/30 backdrop-blur-sm p-8 rounded-lg shadow-lg">
             <h2 className="text-4xl font-bold mb-4">Explore the World of Harry Potter</h2>
             <p className="text-lg mb-4">
               Discover detailed profiles of your favorite characters from the magical world created by J.K. Rowling.
             </p>
           </div>
-        </div>
+        {/* </div> */}
+        </LiquidGlass>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-16">
+      <div className="flex justify-items-center grid grid-cols-1 md:grid-cols-3 gap-2 mt-16">
         {/* Gender Pie Chart */}
-        <div>
-          <h3 className="text-lg font-serif mb-2 text-center">Gender Distribution</h3>
-          <ResponsiveContainer width="100%" height={250}>
-            <PieChart>
-              <Pie
-                data={genderData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={80}
-                label
-                isAnimationActive={true}
-                animationBegin={0}
-                animationDuration={1200}
-              >
+        <Card className="w-[80%] shadow-xl border border-gray-300 bg-white/80 hover:scale-[1.03] transition-transform duration-300">
+          <CardContent>
+            <CardTitle className="text-lg font-serif mb-2 text-center">Gender Distribution</CardTitle>
+            <ResponsiveContainer width="100%" height={250}>
+              <PieChart>
+                <Pie
+                  data={genderData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                  isAnimationActive={true}
+                  animationBegin={0}
+                  animationDuration={1200}
+                >
                 {genderData.map((entry, index) => {
                   let color;
                   if (entry.name.toLowerCase() === 'male') {
@@ -99,14 +104,16 @@ export default function HomePage() {
                 })}
                 </Pie>
                 <Tooltip />
-                </PieChart>
-                </ResponsiveContainer>
-              </div>
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
               
               {/* Age Bar Chart */}
-              <div>
-                <h3 className="text-lg font-serif mb-2 text-center">Age Distribution</h3>
-                <ResponsiveContainer width="100%" height={250}>
+          <Card className="w-[100%] shadow-xl border border-gray-300 bg-white/80 hover:scale-[1.03] transition-transform duration-300">
+            <CardContent>
+              <CardTitle className="text-lg font-serif mb-2 text-center">Age Distribution</CardTitle>
+              <ResponsiveContainer width="100%" height={250}>
                 <BarChart data={ageData} barCategoryGap={4} barGap={2}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
@@ -128,37 +135,40 @@ export default function HomePage() {
                   animationBegin={0}
                 />
                 </BarChart>
-                </ResponsiveContainer>
-              </div>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
 
               {/* House Pie Chart */}
-              <div>
-                <h3 className="text-lg font-serif mb-2 text-center">House Distribution</h3>
-                <ResponsiveContainer width="100%" height={250}>
-                  <PieChart>
-                    <Pie
-                      data={houseData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      label
-                      isAnimationActive={true}
-                      animationBegin={0}
-                      animationDuration={1200}
-                    >
-                {houseData.map((entry, index) => {
-                  const color = COLORS[entry.name] || COLORS.default;
-                  return (
-                    <Cell key={`cell-house-${index}`} fill={color} />
-                  );
-                })}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+          <Card className="w-[80%] shadow-xl border border-gray-300 bg-white/80 hover:scale-[1.03] transition-transform duration-300">
+            <CardContent>
+              <CardTitle className="text-lg font-serif mb-2 text-center">House Distribution</CardTitle>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <PieChart>
+                      <Pie
+                        data={houseData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        label
+                        isAnimationActive={true}
+                        animationBegin={0}
+                        animationDuration={1200}
+                      >
+                        {houseData.map((entry, index) => {
+                          const color = COLORS[entry.name] || COLORS.default;
+                          return (
+                            <Cell key={`cell-house-${index}`} fill={color} />
+                          );
+                        })}
+                      </Pie>
+                      <Tooltip />
+                    </PieChart>
+                  </ResponsiveContainer>
+            </CardContent>
+        </Card>
       </div>
     </div>
   );

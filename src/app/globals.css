@@ -79,13 +79,18 @@
   --gryffindor: oklch(0.5273 0.1933 19.95);
   --slytherin: oklch(0.5415 0.1157 163.39);
   --ravenclaw: oklch(0.5421 0.1539 250.12);
-  --hufflepuff: oklch(0.7905 0.1486 89.09);
+  --hufflepuff: oklch(0.7536 0.1486 81.41);
   --default-house: oklch(0.145 0 0);
   --gryffindor-deep: oklch(0.4718 0.1933 19.95);
   --slytherin-deep: oklch(0.4848 0.1039 163.39);
   --ravenclaw-deep: oklch(0.4965 0.1407 250.12);
-  --hufflepuff-deep: oklch(0.7478 0.1486 89.09);
+  --hufflepuff-deep: oklch(0.7213 0.1486 81.41);
   --default-house-deep: oklch(0.3089 0 0);
+  --gryffindor-table: oklch(0.3981 0.1442 335.78);
+  --slytherin-table: oklch(0.4443 0.0705 72.02);
+  --ravenclaw-table: oklch(0.3981 0.1442 303.34);
+  --hufflepuff-table: oklch(0.558 0.118668 53.24);
+  --default-house-table: oklch(0.3852 0 0);
 }
 
 .dark {

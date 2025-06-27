@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUp } from "lucide-react";
 import { CharacterProvider  } from '@/app/context/context';
 import Link from "next/link";
+import { LiquidGlass } from "liquid-glass-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,14 +20,14 @@ export default function RootLayout({ children }) {
         <header className="w-full p-4 shadow bg-black text-white sticky top-0 z-50 flex items-center px-10">
           <Link
             href="/"
-            className="text-xl font-bold font-serif mr-6 transition-transform duration-300 hover:bg-white hover:text-black hover:rounded-full px-3 py-1"
+            className="text-xl font-bold font-serif mr-6 transition-transform duration-300 hover:bg-white hover:text-black hover:rounded-full hover:scale-[1.03] px-3 py-1"
           >
             Explore the World of Harry Potter
           </Link>
           <div className="flex">
             <Link
               href="/characters"
-              className="font-serif transition-transform duration-300 hover:bg-white hover:text-black hover:rounded-full px-3 py-1"
+              className="font-serif transition-transform duration-300 hover:bg-white hover:text-black hover:rounded-full hover:scale-[1.03] px-3 py-1"
             >
               View Characters
             </Link>
